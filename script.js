@@ -19,6 +19,11 @@ const D = document,
   preCode = $(".pre code, code");
 (comment = $(".commentForm")), (consentBanner = $(".cookie")), (forYouElement = $(".forYou")), (tableOfContents = $(".tableOfContents")), (bookPost = $("#postContainer")), (filterPost = $(".filter .manage .button"));
 
+function dark() {
+  const t = document.documentElement;
+  t.classList.toggle("dark"), t.classList.contains("dark") ? S.setItem("theme", "dark") : S.setItem("theme", "light");
+}
+
 if (!0 === settings.loadingAnimation) {
   function e() {
     const e = D.createElement("div");
@@ -346,34 +351,36 @@ if (share) {
 
 //code
 if (preCode) {
-  loadJS("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js").then(() => {
-    $$("pre code, code").forEach((e) => {
-      hljs.highlightElement(e);
-    });
-  });
-
-  const a = $$(".codeCopy");
-
-  if (a.length > 0) {
-    a.forEach((b) => {
-      b.addEventListener("click", () => {
-        const w = b.closest(".pre")?.querySelector("code");
-
-        if (w) {
-          const c = w.innerText;
-
-          navigator.clipboard.writeText(c).then(() => {
-            const o = b.textContent;
-            b.textContent = "Copied";
-
-            setTimeout(() => {
-              b.textContent = o;
-            }, 1500);
-          });
-        }
+  Lazy(() => {
+    loadJS("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js").then(() => {
+      $$("pre code, code").forEach((e) => {
+        hljs.highlightElement(e);
       });
     });
-  }
+
+    const a = $$(".codeCopy");
+
+    if (a.length > 0) {
+      a.forEach((b) => {
+        b.addEventListener("click", () => {
+          const w = b.closest(".pre")?.querySelector("code");
+
+          if (w) {
+            const c = w.innerText;
+
+            navigator.clipboard.writeText(c).then(() => {
+              const o = b.textContent;
+              b.textContent = "Copied";
+
+              setTimeout(() => {
+                b.textContent = o;
+              }, 1500);
+            });
+          }
+        });
+      });
+    }
+  });
 }
 
 //comment
@@ -499,7 +506,7 @@ if (forYouElement) {
           let topPosts = entries.slice(0, 4);
           let html = "";
           topPosts.forEach((post) => {
-            html += `<article class='flex align-center'><a class='nolight' href='${post.link}' rel="bookmark"><img decoding="async" loading='lazy' src='${post.img}' alt="${post.title}"/></a><h2 class='pFont fontsize16'><a href='${post.link}' rel="bookmark">${post.title}</a></h2></article>`;
+            html += `<article class='flex align-center'><a class='nolight' href='${post.link}' rel="bookmark"><img decoding="async" fetchpriority="high" loading='lazy' src='${post.img}' alt="${post.title}"/></a><h2 class='pFont fontsize16'><a href='${post.link}' rel="bookmark">${post.title}</a></h2></article>`;
           });
           forYouElement.innerHTML = html;
         })
@@ -524,7 +531,7 @@ if (bookPost) {
           i = a.id.$t.split(".post-").pop(),
           r = D.createElement("article");
         (r.className = "bookmark-post inheritcolor"),
-          (r.innerHTML = `<div class='img'><a class='nolight' href="${n}" rel="bookmark"><img decoding="async" loading='lazy' src="${o}" alt="${s}"></a></div><div class="titleI"><h2><a href="${n}" rel="bookmark">${s}</a></h2></div><div class="deleteBtn flex place-center" data-postId="${i}"><svg><use href="#iDel"></use></svg></div>`),
+          (r.innerHTML = `<div class='img'><a class='nolight' href="${n}" rel="bookmark"><img decoding="async" fetchpriority="high" loading='lazy' src="${o}" alt="${s}"></a></div><div class="titleI"><h2><a href="${n}" rel="bookmark">${s}</a></h2></div><div class="deleteBtn flex place-center" data-postId="${i}"><svg><use href="#iDel"></use></svg></div>`),
           t.appendChild(r),
           r.querySelector(".deleteBtn").addEventListener("click", () => {
             deletePost(i);
@@ -619,7 +626,7 @@ if (filterPost) {
     const d = e.media$thumbnail?.url || e.media$content?.[0]?.url;
     return (
       d && (i = d.replace(/\/s\d+-c/, "/w420-h236-p-k-no-nu")),
-      `<article><div class="thumbnail relative nolight"><a href="${s}" rel="bookmark"><img alt="${t}" decoding="async" loading='lazy' src="${i}"></a><div class="book flex place-center absolute pBg"><span class="save-this cursorpointer" data-postid="${a}"><svg><use href="#iBook"></use><use href="#iBook2"></use></svg></span></div></div><div class="i"><div class="nop sColor tFont fontsize13 flex align-center justify-between" style="margin-block:14px 10px"><time datetime="${l}"></time><a aria-label="Like" class="likeI gap6 flex place-center aftertext" data-id="${a}" data-text="--" href="${s}"><svg><use href="#iLike"></use><use href="#iLike2"></use></svg></a></div><h2 class="title pFont"><a href="${s}" rel="bookmark">${t}</a></h2><footer class="tag beforetext fontsize12 sFont" data-text="in "><a aria-label="${n}" class="beforetext" data-text="${n}" href="/search/label/${n}" rel="tag"></a></footer></div></article>`
+      `<article><div class="thumbnail relative nolight"><a href="${s}" rel="bookmark"><img alt="${t}" decoding="async" fetchpriority="high" loading='lazy' src="${i}"></a><div class="book flex place-center absolute pBg"><span class="save-this cursorpointer" data-postid="${a}"><svg><use href="#iBook"></use><use href="#iBook2"></use></svg></span></div></div><div class="i"><div class="nop sColor tFont fontsize13 flex align-center justify-between" style="margin-block:14px 10px"><time datetime="${l}">---</time><a aria-label="Like" class="likeI gap6 flex place-center aftertext" data-id="${a}" data-text="--" href="${s}"><svg><use href="#iLike"></use><use href="#iLike2"></use></svg></a></div><h2 class="title pFont"><a href="${s}" rel="bookmark">${t}</a></h2><footer class="tag beforetext fontsize12 sFont" data-text="in "><a aria-label="${n}" class="beforetext" data-text="${n}" href="/search/label/${n}" rel="tag"></a></footer></div></article>`
     );
   }
   function setFilterLabel(e) {
