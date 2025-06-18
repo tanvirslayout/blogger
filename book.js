@@ -1,3 +1,5 @@
+/* menu js */ function menu(){window.innerWidth===1480?document.body.classList.add("openMenu"):document.body.classList.remove("openMenu")}menu();window.addEventListener("resize",menu);
+
 /* Bookmark With Browser Local Storage, Created by: igniel.com, Source code: https://www.igniel.com/2022/12/widget-bookmark-blog.html */ function bookmarkLoad(){ const bookmarks = {
     maxWidget: 12,
     maxAll: 100,
